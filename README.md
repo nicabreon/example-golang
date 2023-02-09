@@ -1,2 +1,2 @@
 # example-golang
-Simple Example and Snippet in Golang
+Simple Examples and Snippet in Golang
