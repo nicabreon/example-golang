@@ -1,0 +1,30 @@
+#Create Self Signed CA
+    openssl genrsa -des3 -out rootCA.key 4096
+
+    openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 36500 -out rootCA.crt 
+    -config root-config.conf -extensions ca
+
+    openssl x509 -text -noout -in rootCA.crt
+
+#Create Self Signed Server Certificate
+    openssl req -new -sha256 -nodes -newkey rsa:2048 -keyout server.key -out 
+    server.csr -config server-config.conf -extensions req_ext
+
+    openssl req -text -noout -verify -in server.csr
+
+    openssl x509 -req -sha256 -CA rootCA.crt -CAkey rootCA.key -days 730 -CAcreateserial 
+    -extfile server-config.conf -extensions req_ext -in server.csr -out 
+    server.crt
+
+    openssl x509 -text -noout -in server.crt
+
+#Create Self Signed Client Certificate
+    openssl req -new -sha256 -nodes -newkey rsa:2048 -keyout client.key -out client.csr 
+    -config server-config.conf -extensions req_ext
+
+    openssl req -text -noout -verify -in client.csr
+
+    openssl x509 -req -sha256 -CA rootCA.crt -CAkey rootCA.key -days 730 -CAcreateserial 
+    -extfile server-config.conf -extensions req_ext -in client.csr -out client.crt
+
+    openssl x509 -text -noout -in client.crt
